@@ -22,9 +22,9 @@ public class CountryController {
     public ResponseEntity<String> getAllCountries(
             @RequestParam(required = false) final String name,
             @RequestParam(required = false) final Integer population,
-            @RequestParam(required = false) final String sortByName
+            @RequestParam(required = false) final String sortOrder
     ) {
-        return ResponseEntity.ok(countryService.getCountries(name, population, sortByName));
+        return ResponseEntity.ok(countryService.getCountries(name, population, sortOrder));
     }
 
 }

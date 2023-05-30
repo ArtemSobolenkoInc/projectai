@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class CountryService {
         this.mapToCountryConvertor = mapToCountryConvertor;
     }
 
-    public String getCountries(String name, Integer population, String sortByName) {
+    public String getCountries(String name, Integer population, String sortOrder) {
 
         try {
             HttpURLConnection connection = createConnection();
@@ -52,6 +53,10 @@ public class CountryService {
 
                 if (population != null && population > 0) {
                     countries = getFilteredDataByPopulation(countries, population);
+                }
+
+                if (sortOrder != null && !sortOrder.isEmpty() && !sortOrder.isBlank()) {
+                    countries = getSortedCountriesByName(countries, sortOrder);
                 }
 
                 return gson.toJson(countries);
@@ -80,5 +85,19 @@ public class CountryService {
         return countries.stream()
                 .filter(country -> country.getPopulation() < (populationThreshold * 1000000))
                 .collect(Collectors.toList());
+    }
+
+    public List<Country> getSortedCountriesByName(List<Country> countries, String sortOrder) {
+        List<Country> sortedCountries = new ArrayList<>(countries);
+
+        Comparator<Country> nameComparator = Comparator.comparing(country -> country.getName().getCommon());
+
+        if (sortOrder.equalsIgnoreCase("descend")) {
+            sortedCountries.sort(nameComparator.reversed());
+        } else {
+            sortedCountries.sort(nameComparator);
+        }
+
+        return sortedCountries;
     }
 }
