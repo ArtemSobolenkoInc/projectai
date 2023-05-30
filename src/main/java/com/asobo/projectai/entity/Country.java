@@ -17,7 +17,7 @@ public class Country {
     private String ccn3;
     private String cca3;
     private String cioc;
-    private boolean independent;
+    private Boolean independent;
     private String status;
     private boolean unMember;
     private Map<String, Currency> currencies;

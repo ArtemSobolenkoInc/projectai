@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class MapToCountryConvertor implements Converter<Map, Country> {
+public class MapToCountryConvertor implements Converter<Map<String, Object>, Country> {
     @Override
-    public Country convert(Map source) {
+    public Country convert(Map<String, Object> source) {
 
         return Country.builder()
                 .name(convertName((Map<String, Object>) source.get("name")))
@@ -19,7 +19,7 @@ public class MapToCountryConvertor implements Converter<Map, Country> {
                 .ccn3((String) source.get("ccn3"))
                 .cca3((String) source.get("cca3"))
                 .cioc((String) source.get("cioc"))
-                .independent(source.get("independent") != null ? (Boolean) source.get("independent") : false)
+                .independent(source.get("independent") != null ? (Boolean) source.get("independent") : null)
                 .status((String) source.get("status"))
                 .unMember((Boolean) source.get("unMember"))
                 .currencies((Map<String, Country.Currency>) source.get("currencies"))
