@@ -19,8 +19,9 @@ import java.util.stream.Collectors;
 @Service
 public class CountryService {
 
-    private final static String REST_COUNTRIES_API_URL_ALL = "https://restcountries.com/v3.1/all";
     private final static String REQUEST_METHOD = "GET";
+
+    private final static String REST_COUNTRIES_API_URL_ALL = "https://restcountries.com/v3.1/all";
 
     private final MapToCountryConvertor mapToCountryConvertor;
 
@@ -42,9 +43,9 @@ public class CountryService {
                 Gson gson = new Gson();
                 Object countriesData = gson.fromJson(response.toString(), Object.class);
 
-                List<Map> prePaginatedListOfMaps = ((ArrayList<Map>) countriesData).stream().toList();
+                List<Map<String, Object>> prePaginatedListOfMaps = ((ArrayList<Map<String, Object>>) countriesData).stream().toList();
 
-                List<Map> paginatedListOfMaps = getPaginatedListOfMaps(recordsSize, prePaginatedListOfMaps);
+                List<Map<String, Object>> paginatedListOfMaps = getPaginatedListOfMaps(recordsSize, prePaginatedListOfMaps);
 
                 List<Country> countries = paginatedListOfMaps.stream()
                         .map(mapToCountryConvertor::convert).toList();
@@ -70,7 +71,7 @@ public class CountryService {
         }
     }
 
-    private List<Map> getPaginatedListOfMaps(Integer recordsSize, List<Map> prePaginatedListOfMaps) {
+    private List<Map<String, Object>> getPaginatedListOfMaps(Integer recordsSize, List<Map<String, Object>> prePaginatedListOfMaps) {
         if (recordsSize > 0 && recordsSize <= prePaginatedListOfMaps.size()) {
             return prePaginatedListOfMaps.subList(0, recordsSize);
         } else {
