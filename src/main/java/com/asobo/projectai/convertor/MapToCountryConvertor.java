@@ -13,7 +13,7 @@ public class MapToCountryConvertor implements Converter<Map, Country> {
     public Country convert(Map source) {
 
         return Country.builder()
-                .name(convertName((Map) source.get("name")))
+                .name(convertName((Map<String, Object>) source.get("name")))
                 .tld((List<String>) source.get("tld"))
                 .cca2((String) source.get("cca2"))
                 .ccn3((String) source.get("ccn3"))
@@ -22,7 +22,7 @@ public class MapToCountryConvertor implements Converter<Map, Country> {
                 .independent(source.get("independent") != null ? (Boolean) source.get("independent") : false)
                 .status((String) source.get("status"))
                 .unMember((Boolean) source.get("unMember"))
-                .currencies((Map) source.get("currencies"))
+                .currencies((Map<String, Country.Currency>) source.get("currencies"))
                 .idd(convertIdds((Map<String, Object>) source.get("idd")))
                 .capital((List<String>) source.get("capital"))
                 .altSpellings((List<String>) source.get("altSpellings"))
