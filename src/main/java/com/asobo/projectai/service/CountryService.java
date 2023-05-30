@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class CountryService {
         this.mapToCountryConvertor = mapToCountryConvertor;
     }
 
-    public String getAllCountries(String name, Integer population, String param3) {
+    public String getCountries(String name, Integer population, String sortByName) {
 
         try {
             HttpURLConnection connection = createConnection();
@@ -48,10 +47,14 @@ public class CountryService {
                         .map(mapToCountryConvertor::convert).toList();
 
                 if (name != null && !name.isEmpty() && !name.isBlank()) {
-                    return getFilteredDataByName(countries, gson, name);
+                    countries = getFilteredDataByName(countries, name);
                 }
 
-                return gson.toJson(countriesData);
+                if (population != null && population > 0) {
+                    countries = getFilteredDataByPopulation(countries, population);
+                }
+
+                return gson.toJson(countries);
             }
 
         } catch (IOException e) {
@@ -67,9 +70,15 @@ public class CountryService {
         return connection;
     }
 
-    private String getFilteredDataByName(List<Country> countries, Gson gson, String name) {
-        return gson.toJson(countries.stream()
+    private List<Country> getFilteredDataByName(List<Country> countries, String name) {
+        return countries.stream()
                 .filter(c -> c.getName().getCommon().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+    }
+
+    private List<Country> getFilteredDataByPopulation(List<Country> countries, Integer populationThreshold) {
+        return countries.stream()
+                .filter(country -> country.getPopulation() < (populationThreshold * 1000000))
+                .collect(Collectors.toList());
     }
 }
