@@ -28,7 +28,7 @@ public class CountryService {
         this.mapToCountryConvertor = mapToCountryConvertor;
     }
 
-    public String getCountries(String name, Integer population, String sortOrder) {
+    public String getCountries(String name, Integer population, String sortOrder, Integer recordsSize) {
 
         try {
             HttpURLConnection connection = createConnection();
@@ -42,9 +42,11 @@ public class CountryService {
                 Gson gson = new Gson();
                 Object countriesData = gson.fromJson(response.toString(), Object.class);
 
-                List<Map> listOfMaps = ((ArrayList<Map>) countriesData).stream().toList();
+                List<Map> prePaginatedListOfMaps = ((ArrayList<Map>) countriesData).stream().toList();
 
-                List<Country> countries = listOfMaps.stream()
+                List<Map> paginatedListOfMaps = getPaginatedListOfMaps(recordsSize, prePaginatedListOfMaps);
+
+                List<Country> countries = paginatedListOfMaps.stream()
                         .map(mapToCountryConvertor::convert).toList();
 
                 if (name != null && !name.isEmpty() && !name.isBlank()) {
@@ -65,6 +67,14 @@ public class CountryService {
         } catch (IOException e) {
             e.printStackTrace();
             return "Error occurred";
+        }
+    }
+
+    private List<Map> getPaginatedListOfMaps(Integer recordsSize, List<Map> prePaginatedListOfMaps) {
+        if (recordsSize > 0 && recordsSize <= prePaginatedListOfMaps.size()) {
+            return prePaginatedListOfMaps.subList(0, recordsSize);
+        } else {
+            return prePaginatedListOfMaps;
         }
     }
 
@@ -89,15 +99,12 @@ public class CountryService {
 
     public List<Country> getSortedCountriesByName(List<Country> countries, String sortOrder) {
         List<Country> sortedCountries = new ArrayList<>(countries);
-
         Comparator<Country> nameComparator = Comparator.comparing(country -> country.getName().getCommon());
-
         if (sortOrder.equalsIgnoreCase("descend")) {
             sortedCountries.sort(nameComparator.reversed());
         } else {
             sortedCountries.sort(nameComparator);
         }
-
         return sortedCountries;
     }
 }
