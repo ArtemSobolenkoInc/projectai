@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class CountryService {
 
-    private final String REST_COUNTRIES_API_URL_ALL = "https://restcountries.com/v3.1/all";
-    private final String REQUEST_METHOD = "GET";
+    private final static String REST_COUNTRIES_API_URL_ALL = "https://restcountries.com/v3.1/all";
+    private final static String REQUEST_METHOD = "GET";
 
     private final MapToCountryConvertor mapToCountryConvertor;
 
