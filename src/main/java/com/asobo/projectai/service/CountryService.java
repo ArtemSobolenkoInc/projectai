@@ -74,7 +74,7 @@ public class CountryService {
     }
 
     List<Map<String, Object>> getPaginatedListOfMaps(Integer recordsSize, List<Map<String, Object>> prePaginatedListOfMaps) {
-        if (recordsSize > 0 && recordsSize <= prePaginatedListOfMaps.size()) {
+        if (recordsSize != null && recordsSize > 0 && recordsSize <= prePaginatedListOfMaps.size()) {
             return prePaginatedListOfMaps.subList(0, recordsSize);
         } else {
             return prePaginatedListOfMaps;
