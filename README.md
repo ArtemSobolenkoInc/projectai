@@ -1,4 +1,4 @@
-# Project Name: ProjectAI
+# Project Name: ProjectAI (total time spend 8 hours 30 minutes, 30.05.2023 (12:00 – 19:30), 31.05.2023 (11:00 – 12:00))
 
 ## Application Description
 
