@@ -23,6 +23,8 @@ public class CountryService {
 
     private final static String REST_COUNTRIES_API_URL_ALL = "https://restcountries.com/v3.1/all";
 
+    private final static Integer MULTIPLIER = 1000000;
+
     private final MapToCountryConvertor mapToCountryConvertor;
 
     public CountryService(MapToCountryConvertor mapToCountryConvertor) {
@@ -71,7 +73,7 @@ public class CountryService {
         }
     }
 
-    private List<Map<String, Object>> getPaginatedListOfMaps(Integer recordsSize, List<Map<String, Object>> prePaginatedListOfMaps) {
+    List<Map<String, Object>> getPaginatedListOfMaps(Integer recordsSize, List<Map<String, Object>> prePaginatedListOfMaps) {
         if (recordsSize > 0 && recordsSize <= prePaginatedListOfMaps.size()) {
             return prePaginatedListOfMaps.subList(0, recordsSize);
         } else {
@@ -86,15 +88,15 @@ public class CountryService {
         return connection;
     }
 
-    private List<Country> getFilteredDataByName(List<Country> countries, String name) {
+    List<Country> getFilteredDataByName(List<Country> countries, String name) {
         return countries.stream()
                 .filter(c -> c.getName().getCommon().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
-    private List<Country> getFilteredDataByPopulation(List<Country> countries, Integer populationThreshold) {
+    List<Country> getFilteredDataByPopulation(List<Country> countries, Integer populationThreshold) {
         return countries.stream()
-                .filter(country -> country.getPopulation() < (populationThreshold * 1000000))
+                .filter(country -> country.getPopulation() < (populationThreshold * MULTIPLIER))
                 .collect(Collectors.toList());
     }
 
